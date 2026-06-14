@@ -1,12 +1,11 @@
 /**
  * LandingPage.jsx  —  TaxScale
  * Drop into: frontend/src/components/LandingPage.jsx
- *
- * Props:
- * onEnterDashboard() — switches view state to let user run calculations
  */
 
 import { useRef, useState } from "react";
+// 1. Added import for PostHog
+import { usePostHog } from "posthog-js/react";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
 const C = {
@@ -25,7 +24,7 @@ const C = {
   greenDim:   "rgba(59,181,106,0.14)",
 };
 
-// ─── Inline SVG icons (no external deps) ─────────────────────────────────────
+// ─── Inline SVG icons ────────────────────────────────────────────────────────
 const Icon = {
   shield: (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -59,28 +58,30 @@ const Icon = {
   ),
 };
 
-// ─── HOW IT WORKS steps (Streamlined) ─────────────────────────────────────────
 const STEPS = [
   { n: "01", label: "Upload Form 16",   body: "Select the PDF statement issued by your employer to start formatting analysis." },
   { n: "02", label: "Verify figures",    body: "Confirm extracted values or correct them before the engine runs." },
   { n: "03", label: "Get your result",   body: "New vs. Old regime, slab breakdown, and the exact tax saving — instantly." },
 ];
 
-// ─── VALUE PROPS ──────────────────────────────────────────────────────────────
 const PROPS = [
   { icon: Icon.bolt,  title: "Real-time computation",   body: "AY 2026-27 slab rules applied instantly — no waiting." },
   { icon: Icon.lock,  title: "Computed in your browser", body: "Your Form 16 never leaves your device. No account needed." },
   { icon: Icon.scale, title: "Both regimes, side by side", body: "Full slab-wise breakdown so you can see exactly where each rupee falls." },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
 export default function LandingPage({ onEnterDashboard }) {
+  // 2. Initialize PostHog hook
+  const posthog = usePostHog();
   const fileInputRef = useRef(null);
-  const [drag,   setDrag]   = useState(false);
-  const [hover,  setHover]  = useState(false);
+  const [drag,    setDrag]   = useState(false);
+  const [hover,   setHover]  = useState(false);
   const [btnHov, setBtnHov] = useState(false);
 
   const handleActionClick = () => {
+    // 3. Capture the event in PostHog
+    posthog.capture("user_started_analysis");
+    
     if (typeof onEnterDashboard === "function") {
       onEnterDashboard();
     }
@@ -90,7 +91,6 @@ export default function LandingPage({ onEnterDashboard }) {
     <div style={{ minHeight:"100vh", background:C.bg, color:C.text,
       fontFamily:"'Inter', system-ui, sans-serif", display:"flex", flexDirection:"column" }}>
 
-      {/* ── Topbar (Clean and Streamlined) ── */}
       <header style={{ display:"flex", alignItems:"center", padding:"18px 32px",
         borderBottom:`1px solid ${C.border}`, gap:10 }}>
         <div style={{ width:32, height:32, background:C.gold, display:"flex",
@@ -100,11 +100,9 @@ export default function LandingPage({ onEnterDashboard }) {
           fontSize:18, color:C.text, letterSpacing:"0.01em" }}>TaxScale</span>
       </header>
 
-      {/* ── Hero ── */}
       <main style={{ flex:1, display:"flex", flexDirection:"column",
         alignItems:"center", padding:"52px 24px 40px", textAlign:"center" }}>
 
-        {/* Eyebrow */}
         <div style={{ display:"flex", alignItems:"center", gap:7,
           fontSize:10, letterSpacing:"0.16em", textTransform:"uppercase",
           color:C.gold, marginBottom:20 }}>
@@ -112,7 +110,6 @@ export default function LandingPage({ onEnterDashboard }) {
           Indian Income Tax · AY 2026-27
         </div>
 
-        {/* Headline */}
         <h1 style={{ fontFamily:"'DM Serif Display', Georgia, serif",
           fontSize:"clamp(28px, 5.5vw, 46px)", lineHeight:1.14,
           letterSpacing:"-0.01em", margin:"0 0 20px", maxWidth:520 }}>
@@ -121,7 +118,6 @@ export default function LandingPage({ onEnterDashboard }) {
           <br/>saves you more.
         </h1>
 
-        {/* Sub */}
         <p style={{ fontSize:"clamp(13px, 2vw, 15px)", lineHeight:1.75,
           color:C.textSub, maxWidth:440, margin:"0 auto 36px" }}>
           Upload your employer-issued Form 16. TaxScale computes your liability
@@ -129,7 +125,6 @@ export default function LandingPage({ onEnterDashboard }) {
           exactly how much to expect back when you file.
         </p>
 
-        {/* ── Upload Zone (Directs users right into pipeline) ── */}
         <div
           role="button" tabIndex={0}
           aria-label="Launch TaxScale Analyzer Pipeline"
@@ -150,7 +145,6 @@ export default function LandingPage({ onEnterDashboard }) {
             marginBottom:10,
           }}>
 
-          {/* Icon circle */}
           <div style={{ width:44, height:44, borderRadius:"50%",
             background:C.goldDim, display:"flex", alignItems:"center",
             justifyContent:"center" }}>
@@ -182,7 +176,6 @@ export default function LandingPage({ onEnterDashboard }) {
             <span aria-hidden="true">→</span>
           </button>
 
-          {/* Security Note */}
           <div style={{ display:"flex", alignItems:"center", gap:6,
             fontSize:10, color:C.textMut }}>
             {Icon.shield}
@@ -190,7 +183,6 @@ export default function LandingPage({ onEnterDashboard }) {
           </div>
         </div>
 
-        {/* ── How it works ── */}
         <div style={{ width:"100%", maxWidth:600, margin:"44px 0 0" }}>
           <div style={{ display:"flex", alignItems:"center", gap:16,
             marginBottom:24 }}>
@@ -219,7 +211,6 @@ export default function LandingPage({ onEnterDashboard }) {
           </div>
         </div>
 
-        {/* ── Value props ── */}
         <div style={{ width:"100%", maxWidth:600, margin:"32px 0 0",
           display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(160px, 1fr))",
           gap:1, border:`1px solid ${C.border}`, overflow:"hidden" }}>
@@ -239,7 +230,6 @@ export default function LandingPage({ onEnterDashboard }) {
           ))}
         </div>
 
-        {/* ── Compliance callout ── */}
         <div style={{ marginTop:32, width:"100%", maxWidth:600,
           border:`1px solid ${C.border}`, background:C.surface,
           padding:"16px 20px", display:"flex", alignItems:"flex-start",
@@ -260,11 +250,9 @@ export default function LandingPage({ onEnterDashboard }) {
 
       </main>
 
-      {/* ── Footer ── */}
       <footer style={{ borderTop:`1px solid ${C.border}`,
         padding:"14px 32px", display:"flex", alignItems:"center",
         justifyContent:"space-between", flexWrap:"wrap", gap:12 }}>
-
         <div style={{ display:"flex", alignItems:"center", gap:6 }}>
           <span style={{ width:6, height:6, borderRadius:"50%",
             background:C.green, flexShrink:0 }} />
@@ -273,20 +261,17 @@ export default function LandingPage({ onEnterDashboard }) {
             Runs in your browser
           </span>
         </div>
-
         <p style={{ fontSize:10, color:C.textMut, letterSpacing:"0.02em",
           margin:0, textAlign:"center", flex:1, minWidth:200 }}>
           Informational use only — not a substitute for professional tax advice.
           Verify all figures with a qualified CA before filing.
         </p>
-
         <span style={{ fontSize:9, letterSpacing:"0.1em",
           textTransform:"uppercase", color:C.textMut,
           border:`1px solid ${C.border}`, padding:"3px 9px" }}>
           AY 2026-27
         </span>
       </footer>
-
 
       <style>{`
         @media (max-width: 600px) {
