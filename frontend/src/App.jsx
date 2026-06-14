@@ -1289,7 +1289,7 @@ export default function App() {
     if (!analysis || !metrics) return;
     setExporting(true);
     try {
-      const res = await fetch(`${BASE_URL}/api/export-pdf`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/export-pdf`,  {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

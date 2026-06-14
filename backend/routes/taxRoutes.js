@@ -74,5 +74,17 @@ router.get('/reports', async (req, res) => {
         return res.status(500).json({ success: false, error: error.message });
     }
 });
+const { generatePDF } = require('../pdfGenerator');
 
+router.post('/export-pdf', async (req, res) => {
+    try {
+        const pdfBuffer = await generatePDF(req.body);
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=TaxScale_Report.pdf');
+        res.send(pdfBuffer);
+    } catch (error) {
+        console.error('PDF Generation Error:', error);
+        res.status(500).json({ success: false, error: 'Failed to generate PDF' });
+    }
+});
 module.exports = router;

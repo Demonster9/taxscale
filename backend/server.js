@@ -196,6 +196,18 @@ app.post('/api/parse-form16', upload.single('form16'), async (req, res) => {
   }
 });
 
+// ── Route: Export PDF ────────────────────────────────────────────────────────
+app.post('/api/export-pdf', async (req, res) => {
+  try {
+    const pdfBuffer = await generatePDF(req.body);
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=TaxScale_Report.pdf');
+    res.send(pdfBuffer);
+  } catch (error) {
+    console.error('🚨 PDF Export Error:', error);
+    res.status(500).json({ success: false, error: 'Failed to generate PDF' });
+  }
+});
 // ... (Rest of your existing routes: Route B, C, D, E, F) ...
 // Ensure you paste the existing routes for reports, manual save, years, calculate, export-pdf below this.
 
