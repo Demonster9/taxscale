@@ -344,28 +344,27 @@ function buildReportHTML(data) {
 async function generatePDF(reportData) {
   const html = buildReportHTML(reportData);
   
-  // Use the environment variable we set in Render
+  // Puppeteer will now manage the browser installation automatically
   const browser = await puppeteer.launch({
     headless: 'new',
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined, 
     args: [
       '--no-sandbox', 
       '--disable-setuid-sandbox', 
       '--disable-dev-shm-usage',
-      '--disable-gpu' // Often helps on cloud containers
+      '--no-zygote',
+      '--single-process', // Necessary for many cloud environments
+      '--disable-gpu'
     ],
   });
 
   try {
     const page = await browser.newPage();
-    // Use 'domcontentloaded' to speed up PDF generation
     await page.setContent(html, { waitUntil: 'domcontentloaded' });
-    const pdfBuffer = await page.pdf({
+    return await page.pdf({
       format: 'A4',
       printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
     });
-    return pdfBuffer;
   } finally {
     await browser.close();
   }
