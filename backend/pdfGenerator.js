@@ -341,17 +341,18 @@ function buildReportHTML(data) {
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────
-const puppeteer = require('puppeteer-core');
-const chromium = require('@sparticuz/chromium');
-
 async function generatePDF(reportData) {
   const html = buildReportHTML(reportData);
   
   const browser = await puppeteer.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: chromium.headless,
+    headless: 'new',
+    
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-gpu'
+    ],
   });
 
   try {
@@ -366,4 +367,5 @@ async function generatePDF(reportData) {
     await browser.close();
   }
 }
+
 module.exports = { generatePDF, buildReportHTML };
