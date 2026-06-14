@@ -23,6 +23,11 @@ const { calculateTaxes }          = require('./utils/taxEngine');
 const app    = express();
 const PORT   = process.env.PORT || 5000;
 
+// Add this simple route to your existing Express app
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // SECURITY FIX: Restricted buffer size allocation to prevent RAM exhaustion (DoS Protection)
 const upload = multer({ 
   storage: multer.memoryStorage(),

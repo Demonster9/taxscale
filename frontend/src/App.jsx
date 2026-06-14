@@ -1081,17 +1081,21 @@ export default function App() {
         throw new Error(data.error || 'Parsing failed on server.');
       }
     } catch (err) {
-      clearTimeout(timeoutId);
+  clearTimeout(timeoutId);
       if (err.name === 'AbortError') {
-        setError('Connection timed out. Is your local server running on port 5000?');
+        // User-friendly version
+        setError('The request took too long. Please check your internet connection and try again.');
       } else if (err.message === 'Failed to fetch') {
-        setError('Cannot reach the server. Check that it is running on port 5000 and the protocol matches.');
+        // User-friendly version
+        setError('We are having trouble connecting to our server. Please try again in a few moments.');
       } else {
-        setError(err.message || 'Gateway offline. Check local server logs.');
+        // User-friendly version
+        setError('Something went wrong on our end. Please refresh the page and try again.');
       }
     } finally {
       setLoading(false);
     }
+    
   };
 
   if (view === 'landing') {
