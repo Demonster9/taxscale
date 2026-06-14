@@ -341,20 +341,17 @@ function buildReportHTML(data) {
 }
 
 // ── Public API ────────────────────────────────────────────────────────────────
+const puppeteer = require('puppeteer-core');
+const chromium = require('@sparticuz/chromium');
+
 async function generatePDF(reportData) {
   const html = buildReportHTML(reportData);
   
-  // Puppeteer will now manage the browser installation automatically
   const browser = await puppeteer.launch({
-    headless: 'new',
-    args: [
-      '--no-sandbox', 
-      '--disable-setuid-sandbox', 
-      '--disable-dev-shm-usage',
-      '--no-zygote',
-      '--single-process', // Necessary for many cloud environments
-      '--disable-gpu'
-    ],
+    args: chromium.args,
+    defaultViewport: chromium.defaultViewport,
+    executablePath: await chromium.executablePath(),
+    headless: chromium.headless,
   });
 
   try {
