@@ -3,6 +3,7 @@ import { TAX_RULES, CURRENT_AY } from './config/taxSlabs';
 import React, { useState, useEffect, useRef } from 'react';
 import { Upload, AlertTriangle, RefreshCw, Download, Eye, EyeOff, CheckCircle, Info, AlertCircle } from 'lucide-react';
 import Dashboard from './components/Dashboard';
+import { Analytics } from '@vercel/analytics/react';
 
 // To this, to match the protocol dynamically:
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || `${window.location.protocol}//localhost:5000`;
@@ -1767,6 +1768,7 @@ export default function App() {
 
         <LegalDisclaimer />
       </div>
+      <Analytics />
     </>
   );
 }
