@@ -121,8 +121,7 @@ export default function LandingPage({ onEnterDashboard }) {
         <p style={{ fontSize:"clamp(13px, 2vw, 15px)", lineHeight:1.75,
           color:C.textSub, maxWidth:440, margin:"0 auto 36px" }}>
           Upload your employer-issued Form 16. TaxScale computes your liability
-          under both regimes, shows a full slab breakdown, and tells you
-          exactly how much to expect back when you file.
+          under both regimes, shows a full slab breakdown,and estimates your potential tax refund or balance payable.
         </p>
 
         <div
