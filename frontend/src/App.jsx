@@ -967,6 +967,15 @@ const LegalDisclaimer = () => (
         TaxScale runs entirely in your local browser. We do not store your documents,
         salary details, or personal data.
       </span>{' '}
+      <br/>
+      {/* ADD THIS LINK BLOCK BELOW */}
+      <a 
+        href="mailto:taxscale.support@gmail.com?subject=TaxScale Bug Report&body=Hi TaxScale Support, I encountered an issue. Here are the details:%0D%0A%0D%0A- Issue Description:%0D%0A- Expected Result:%0D%0A- (Optional) Please attach your Form 16 PDF if you are comfortable."
+        style={{ color: '#E8C547', textDecoration: 'underline', cursor: 'pointer', marginRight: '5px' }}
+      >
+        Report a Bug
+      </a>
+      {" | "}
       <strong>Informational use only.</strong>{' '}
       TaxScale provides automated computations for indicative purposes and does{' '}
       <strong>not</strong> constitute professional tax, legal, or financial advice. Figures
